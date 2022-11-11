@@ -134,7 +134,7 @@ function [gf] = graph_formatter(a)
         
     % concatenate the argument with the default, with the argument values taking precedence
     warning('off', 'catstruct:DuplicatesFound');
-    gf = catstruct(gf, a);
+    gf = catstruct(a, gf);
 
     
 %% Figure out handles
@@ -276,24 +276,28 @@ function [gf] = graph_formatter(a)
             warning('off', 'MATLAB:warn_r14_stucture_assignment');
             switch gf.font_size
                 case {'tiny', 't'}
+                    gf.font_size = [];
                     gf.font_size.title = 8;
                     gf.font_size.general = 8;
                     gf.font_size.x_label = 8;
                     gf.font_size.y_label = 8;
                     gf.font_size.legend = 8;
                 case {'small', 's'}
+                    gf.font_size = [];
                     gf.font_size.title = 12;
                     gf.font_size.general = 10;
                     gf.font_size.x_label = 12;
                     gf.font_size.y_label = 12;
                     gf.font_size.legend = 10;
                 case {'medium', 'med', 'm'}
+                    gf.font_size = [];
                     gf.font_size.title = 24;
                     gf.font_size.general = 14;
                     gf.font_size.x_label = 18;
                     gf.font_size.y_label = 18;
                     gf.font_size.legend = 14;
                 case {'large', 'l'}
+                    gf.font_size = [];
                     gf.font_size.title = 36;
                     gf.font_size.general = 18;
                     gf.font_size.x_label = 24;
