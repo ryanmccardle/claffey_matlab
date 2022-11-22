@@ -32,24 +32,32 @@ function [device_indices] = input_device_find(type_filter, is_active_filter)
     % filter the list by type
     if exist('type_filter', 'var') && ~isempty(type_filter)
         type_filter = lower(type_filter);
-        
+    
         % if the type provided was 'key', search for both keyboards and
         % keypads
         if strcmp(type_filter, 'key')
-            keypad_indices = strcmp( cellstr(char(device_list.type_short)), 'keypad' );
-            keyboard_indices = strcmp( cellstr(char(device_list.type_short)), 'keyboard' );
+            keypad_indices = strcmp(cellstr(char(device_list.type_short)), 'keypad');
+            keyboard_indices = strcmp(cellstr(char(device_list.type_short)), 'keyboard');
             filter_indices = or(keypad_indices, keyboard_indices);
         else
-            filter_indices = strcmp( cellstr(char(device_list.type_short)), type_filter );
+            filter_indices = strcmp(cellstr(char(device_list.type_short)), type_filter);
         end
         device_list = device_list(filter_indices, :);
     end
-
+    
     % filter the list by is active
     if exist('is_active_filter', 'var') && is_active_filter
         filter_indices = device_list.active;
         device_list = device_list(filter_indices, :);
     end
-
+    
+    % remove touch bar
+    touchbar_indices = strcmp(cellstr(char(device_list.product)), 'TouchBarUserDevice');
+    device_list = device_list(not(touchbar_indices), :);
+    
+    % remove bluetooth devices
+    bluetooth_indices = contains(cellstr(char(device_list.transport)), 'Bluetooth');
+    device_list = device_list(not(bluetooth_indices), :);
+    
     device_indices = device_list.index;
 end
