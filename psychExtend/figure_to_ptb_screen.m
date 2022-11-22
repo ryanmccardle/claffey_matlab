@@ -31,9 +31,7 @@ function figure_to_ptb_screen(f_handle, w, screen_size)
     f_image_size = size(f_image);
     image_scale_percentage = min([1, .8 * screen_height / f_image_size(1), .8 * screen_width / f_image_size(2)]);    
     new_f_image_size = round(f_image_size(1:2) * image_scale_percentage);
-    old_warnings = intwarning('off'); % turn off integer warnings for now, speeds up calculations
     f_image = imresize(f_image, new_f_image_size);
-    intwarning(old_warnings); % revert to old warning state
     
     f_image_size = size(f_image);
     image_height = f_image_size(1);
