@@ -5,7 +5,7 @@ function [device_indices] = input_device_find(type_filter, is_active_filter)
 %
 %   TYPE_FILTER - can be '' to include all devices or any of the following:
 %       keyboard
-%       keybad
+%       keypad
 %       key (for both keyboards and kepypads)
 %       mouse
 %       joystick
@@ -28,6 +28,20 @@ function [device_indices] = input_device_find(type_filter, is_active_filter)
 % 04/23/08 original version
 
     device_list = input_device_list(true);
+
+    % remove touch bar
+    touchbar_indices = strcmp(cellstr(char(device_list.product)), 'TouchBarUserDevice');
+    device_list = device_list(not(touchbar_indices), :);
+
+    % remove devices which are an unknown type
+    unknown_indices = strcmp(cellstr(char(device_list.type_short)), 'unknown');
+    device_list = device_list(not(unknown_indices), :);
+
+    % move bluetooth devices to bottom of list
+    bluetooth_indices = contains(cellstr(char(device_list.transport)), 'Bluetooth');
+    temp_device_list = device_list(not(bluetooth_indices), :);
+    temp_device_list(end+1, :) = device_list(bluetooth_indices, :);
+    device_list = temp_device_list;
     
     % filter the list by type
     if exist('type_filter', 'var') && ~isempty(type_filter)
@@ -50,14 +64,6 @@ function [device_indices] = input_device_find(type_filter, is_active_filter)
         filter_indices = device_list.active;
         device_list = device_list(filter_indices, :);
     end
-    
-    % remove touch bar
-    touchbar_indices = strcmp(cellstr(char(device_list.product)), 'TouchBarUserDevice');
-    device_list = device_list(not(touchbar_indices), :);
-    
-    % remove bluetooth devices
-    bluetooth_indices = contains(cellstr(char(device_list.transport)), 'Bluetooth');
-    device_list = device_list(not(bluetooth_indices), :);
     
     device_indices = device_list.index;
 end

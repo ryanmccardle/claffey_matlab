@@ -25,9 +25,7 @@ function [keyboard_index] = input_device_keyboard(show_warning)
 
             device_list = input_device_list(true);
             selected_device = device_list(keyboard_index(1), :);
-            if contains(char(selected_device.transport), 'Bluetooth')
-                warning('Bluetooth keyboard found as first device, timing can be unreliable!') %#ok<WNTAG>
-            end
+            if contains(cellstr(char(selected_device.transport)), 'Bluetooth');
         end
         keyboard_index = keyboard_index(1);
     end
