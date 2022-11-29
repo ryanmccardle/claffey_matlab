@@ -40,8 +40,7 @@ function [device_indices] = input_device_find(type_filter, is_active_filter)
     % move bluetooth devices to bottom of list
     bluetooth_indices = contains(cellstr(char(device_list.transport)), 'Bluetooth');
     temp_device_list = device_list(not(bluetooth_indices), :);
-    temp_device_list(end+1, :) = device_list(bluetooth_indices, :);
-    device_list = temp_device_list;
+    device_list = vertcat(temp_device_list, device_list(bluetooth_indices, :));
     
     % filter the list by type
     if exist('type_filter', 'var') && ~isempty(type_filter)
