@@ -21,11 +21,10 @@ function figure_to_ptb_screen(f_handle, w, screen_size)
 
 
 %% get an image of the figure
-
-    file_name = sprintf('temp_figure_to_ptb_screen');
-    print(f_handle, '-dtiff', file_name);
-    f_image = imread(file_name, 'tiff');
-    delete([file_name '.*'])
+drawnow;
+set(f_handle, 'Units', 'normalized', 'OuterPosition', [0 0 0.5 0.8]); % Make larger
+set(gca, 'LooseInset', get(gca, 'TightInset'));
+f_image = print(f_handle, '-RGBImage', '-r0');   
     
 %% scale the image for the screen    
     f_image_size = size(f_image);
